@@ -7,7 +7,7 @@ CurrencyConverter is a Ruby gem for converting currencies based on real-time exc
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'currency_converter'
+gem 'currency-converter', '~> 0.1.0'
 ```
 
 And then execute:
