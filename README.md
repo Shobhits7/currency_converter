@@ -20,8 +20,10 @@ Or install it yourself as:
 
 ## Usage
 
+To get your api key, you can sign up for free at [Exchange Rate API](https://www.exchangerate-api.com/)
+
 ```ruby
-require "currency_converter"
+require "currency-converter"
 
 converter = CurrencyConverter::Converter.new("your_api_key")
 amount_in_eur = converter.convert(100, "USD", "EUR")
