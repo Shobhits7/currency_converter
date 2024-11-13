@@ -1,6 +1,9 @@
 # CurrencyConverter
 
-CurrencyConverter is a Ruby gem for converting currencies based on real-time exchange rates.
+CurrencyConverter is a Ruby gem that provides real-time currency conversion using up-to-date exchange rates from Exchange Rate API. This gem is designed to be simple, reliable, and easy to integrate into Ruby applications.
+
+Author
+Developed by [Shobhit Jain](https://github.com/shobhits7).
 
 ## Installation
 
@@ -16,7 +19,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install currency_converter
+    $ gem install currency-converter
 
 ## Usage
 
