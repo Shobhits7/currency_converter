@@ -11,4 +11,4 @@ gem "rspec", "~> 3.0"
 
 gem "rubocop", "~> 1.21"
 
-gem 'stringio', '~> 3.1.2'
+gem "stringio", "~> 3.1.2"

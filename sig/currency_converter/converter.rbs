@@ -1,0 +1,9 @@
+module CurrencyConverter
+  class Converter
+    @api_key: String
+
+    private
+
+    def fetch_exchange_rate: -> untyped
+  end
+end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # spec/converter_spec.rb
 require "currency_converter"
 
