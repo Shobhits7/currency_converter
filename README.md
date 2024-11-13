@@ -10,7 +10,7 @@ Developed by [Shobhit Jain](https://github.com/shobhits7).
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'currency-converter', '~> 0.1.0'
+gem 'currency-converter', '~> 1.1.0'
 ```
 
 And then execute:
