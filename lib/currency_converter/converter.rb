@@ -26,13 +26,21 @@ module CurrencyConverter
     # @param from_currency [String] the source currency code (e.g., "USD")
     # @param to_currency [String] the target currency code (e.g., "EUR")
     # @return [Float] the converted amount
+    # @raise [CurrencyConverter::InvalidAmountError] if amount is invalid
+    # @raise [CurrencyConverter::InvalidCurrencyError] if currency code is invalid
     # @raise [CurrencyConverter::APIError] if conversion fails due to API or network errors
     def convert(amount, from_currency, to_currency)
+      validate_amount(amount)
+      validate_currency_code(from_currency, "from_currency")
+      validate_currency_code(to_currency, "to_currency")
+
       rate = fetch_exchange_rate(from_currency, to_currency)
       (amount * rate).round(2)
     rescue CurrencyConverter::RateNotFoundError => e
       log_error("Conversion failed: #{e.message}")
       raise CurrencyConverter::APIError, "Conversion failed: #{e.message}"
+    rescue CurrencyConverter::InvalidAmountError, CurrencyConverter::InvalidCurrencyError
+      raise # Re-raise validation errors as-is
     rescue StandardError => e
       log_error("Conversion failed: #{e.message}")
       raise
@@ -46,7 +54,8 @@ module CurrencyConverter
     # @param to_currency [String] the target currency code
     # @return [Float] the exchange rate
     def fetch_exchange_rate(from_currency, to_currency)
-      @cache.fetch("#{from_currency}_#{to_currency}") do
+      cache_duration = CurrencyConverter.configuration.cache_duration
+      @cache.fetch("#{from_currency}_#{to_currency}", expires_in: cache_duration) do
         @api_client.get_rate(from_currency, to_currency)
       end
     end
@@ -55,6 +64,36 @@ module CurrencyConverter
     # @param message [String] the error message to log
     def log_error(message)
       CurrencyConverter.configuration.logger.error(message)
+    end
+
+    # Validates the amount parameter.
+    # @param amount [Numeric] the amount to validate
+    # @raise [InvalidAmountError] if amount is invalid
+    def validate_amount(amount)
+      if amount.nil?
+        raise InvalidAmountError, "Amount cannot be nil"
+      elsif !amount.is_a?(Numeric)
+        raise InvalidAmountError, "Amount must be a number, got #{amount.class}"
+      elsif amount.negative?
+        raise InvalidAmountError, "Amount cannot be negative (got #{amount})"
+      end
+    end
+
+    # Validates the currency code parameter.
+    # @param currency_code [String] the currency code to validate
+    # @param param_name [String] the parameter name for error messages
+    # @raise [InvalidCurrencyError] if currency code is invalid
+    def validate_currency_code(currency_code, param_name)
+      if currency_code.nil?
+        raise InvalidCurrencyError, "#{param_name} cannot be nil"
+      elsif !currency_code.is_a?(String)
+        raise InvalidCurrencyError, "#{param_name} must be a string, got #{currency_code.class}"
+      elsif currency_code.empty?
+        raise InvalidCurrencyError, "#{param_name} cannot be empty"
+      elsif !currency_code.match?(/\A[A-Z]{3}\z/)
+        raise InvalidCurrencyError,
+              "#{param_name} must be a 3-letter uppercase code (e.g., 'USD'), got '#{currency_code}'"
+      end
     end
   end
 end

@@ -13,10 +13,11 @@ module CurrencyConverter
 
     # Fetches the value from the cache, using the block to provide a default value.
     # @param key [String] the cache key
+    # @param expires_in [Integer] the cache expiration time in seconds
     # @param block [Proc] the block to execute if the key is not found in cache
     # @return [Object] the cached value
-    def fetch(key, &block)
-      @cache.fetch(key, &block) # ActiveSupport's cache expects only the key and a block
+    def fetch(key, expires_in: nil, &block)
+      @cache.fetch(key, expires_in: expires_in, &block)
     end
   end
 end
