@@ -14,10 +14,11 @@ module CurrencyConverter
   # The Converter class performs currency conversions using exchange rates.
   # It retrieves rates from an external API and caches them for performance.
   class Converter
-    def initialize(api_key: CurrencyConverter.configuration.api_key)
-      # Initializes the API client with the provided or configured API key.
+    def initialize(api_key: CurrencyConverter.configuration.api_key,
+                   timeout: CurrencyConverter.configuration.timeout)
+      # Initializes the API client with the provided or configured API key and timeout.
       # Initializes a caching object for exchange rates.
-      @api_client = APIClient.new(api_key)
+      @api_client = APIClient.new(api_key, timeout: timeout)
       @cache = Cache.new
     end
 
