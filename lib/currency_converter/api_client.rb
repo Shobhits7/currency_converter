@@ -45,7 +45,7 @@ module CurrencyConverter
       rate
     rescue JSON::ParserError
       raise APIError, "Invalid API response format"
-    rescue Timeout::Error, Net::OpenTimeout, Net::ReadTimeout => e
+    rescue Net::OpenTimeout, Net::ReadTimeout => e
       raise TimeoutError, "Request timed out after #{@timeout} seconds: #{e.message}"
     rescue Net::HTTPError, SocketError => e
       raise APIError, "Network error: #{e.message}"
@@ -81,7 +81,7 @@ module CurrencyConverter
       when "unsupported-code"
         raise APIError, "Unsupported currency code"
       else
-        raise APIError, "API error: #{error_type || 'unknown error'}"
+        raise APIError, "API error: #{error_type || "unknown error"}"
       end
     end
 
@@ -90,7 +90,7 @@ module CurrencyConverter
     # @return [String] the response body
     def fetch_with_timeout(uri)
       Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https",
-                      open_timeout: @timeout, read_timeout: @timeout) do |http|
+                                          open_timeout: @timeout, read_timeout: @timeout) do |http|
         request = Net::HTTP::Get.new(uri)
         response = http.request(request)
         response.body
