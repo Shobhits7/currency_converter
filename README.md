@@ -1,5 +1,9 @@
 # CurrencyConverter
 
+[![Gem Version](https://badge.fury.io/rb/currency-converter.svg?icon=si%3Arubygems)](https://badge.fury.io/rb/currency-converter)
+[![Downloads](https://img.shields.io/gem/dt/currency-converter.svg)](https://rubygems.org/gems/currency-converter)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 The CurrencyConverter gem provides an easy way to perform currency conversions. It allows you to convert amounts between different currencies using real-time exchange rates from ExchangeRate-API, while offering caching for performance improvements and comprehensive error handling for robustness.
 
 **Version 1.2.0** brings significant improvements including v6 API support, input validation, HTTP timeout protection, and 100% test coverage.

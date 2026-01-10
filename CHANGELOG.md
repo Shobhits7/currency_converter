@@ -1,3 +1,21 @@
+## [1.2.1] - 2026-01-10
+
+### Changed
+- **Gemspec Metadata**: Added metadata links for better RubyGems integration
+  - Added changelog_uri pointing to CHANGELOG.md
+  - Added bug_tracker_uri pointing to GitHub Issues
+  - Added documentation_uri pointing to README.md
+  - Added wiki_uri pointing to GitHub Wiki
+  - These links now appear on the RubyGems.org page for better discoverability
+- **README Badges**: Added professional badges to README
+  - Gem Version badge (shows current version)
+  - Downloads badge (shows total download count)
+  - License badge (shows MIT license)
+
+### Notes
+- No functional changes - this is a metadata-only release
+- Improves gem discoverability and professionalism on RubyGems.org
+
 ## [1.2.0] - 2026-01-10
 
 ### Added
