@@ -37,12 +37,14 @@ RSpec.describe CurrencyConverter::Cache do
     end
 
     it "returns fresh data when no expires_in is provided" do
+      # rubocop:disable Style/RedundantFetchBlock
       result = cache.fetch("no_expiry_key") { "value_1" }
       expect(result).to eq("value_1")
 
       # Without expiration, values stay cached indefinitely
       cached_result = cache.fetch("no_expiry_key") { "value_2" }
       expect(cached_result).to eq("value_1")
+      # rubocop:enable Style/RedundantFetchBlock
     end
 
     it "handles different cache keys independently" do

@@ -8,6 +8,24 @@ RSpec.describe CurrencyConverter::APIClient do
     context "with authenticated v6 API (with API key)" do
       let(:client) { described_class.new("test_api_key_123", timeout: 5) }
 
+      it "logs authenticated API mode on initialization" do
+        logger = instance_double(Logger, info: nil)
+        allow(CurrencyConverter).to receive(:configuration).and_return(
+          double(logger: logger, timeout: 10)
+        )
+        expect(logger).to receive(:info).with(/Using v6 authenticated API/)
+
+        described_class.new("test_key")
+      end
+
+      it "handles nil logger gracefully" do
+        allow(CurrencyConverter).to receive(:configuration).and_return(
+          double(logger: nil, timeout: 10)
+        )
+
+        expect { described_class.new("test_key") }.not_to raise_error
+      end
+
       it "returns the exchange rate for a valid currency pair" do
         stub_request(:get, "https://v6.exchangerate-api.com/v6/test_api_key_123/latest/USD")
           .to_return(body: { result: "success", conversion_rates: { "EUR" => 0.85 } }.to_json)
@@ -50,6 +68,16 @@ RSpec.describe CurrencyConverter::APIClient do
 
     context "with open access v6 API (without API key)" do
       let(:client) { described_class.new(nil, timeout: 5) }
+
+      it "logs open access API mode on initialization" do
+        logger = instance_double(Logger, info: nil)
+        allow(CurrencyConverter).to receive(:configuration).and_return(
+          double(logger: logger, timeout: 10)
+        )
+        expect(logger).to receive(:info).with(/Using v6 open access API/)
+
+        described_class.new(nil)
+      end
 
       it "returns the exchange rate using open access endpoint" do
         stub_request(:get, "https://open.er-api.com/v6/latest/USD")
@@ -115,6 +143,22 @@ RSpec.describe CurrencyConverter::APIClient do
 
         expect { client.get_rate("USD", "XYZ") }
           .to raise_error(CurrencyConverter::APIError, /Unsupported currency code/)
+      end
+
+      it "raises an APIError for unknown error types" do
+        stub_request(:get, "https://v6.exchangerate-api.com/v6/test_key/latest/USD")
+          .to_return(body: { result: "error", "error-type" => "some-unknown-error" }.to_json)
+
+        expect { client.get_rate("USD", "EUR") }
+          .to raise_error(CurrencyConverter::APIError, /API error: some-unknown-error/)
+      end
+
+      it "raises an APIError when error type is nil" do
+        stub_request(:get, "https://v6.exchangerate-api.com/v6/test_key/latest/USD")
+          .to_return(body: { result: "error" }.to_json)
+
+        expect { client.get_rate("USD", "EUR") }
+          .to raise_error(CurrencyConverter::APIError, /API error: unknown error/)
       end
     end
 

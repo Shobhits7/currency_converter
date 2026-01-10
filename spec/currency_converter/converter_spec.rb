@@ -40,12 +40,49 @@ RSpec.describe CurrencyConverter::Converter do
         expect { converter.convert(100, "USD", "EUR") }
           .to raise_error(CurrencyConverter::APIError, /Conversion failed/)
       end
+
+      it "logs error when conversion fails" do
+        logger = instance_double(Logger, error: nil, info: nil)
+        allow(CurrencyConverter.configuration).to receive(:logger).and_return(logger)
+
+        expect(logger).to receive(:error).with(/Conversion failed/)
+
+        begin
+          converter.convert(100, "USD", "EUR")
+        rescue CurrencyConverter::APIError
+          # Expected error
+        end
+      end
+
+      it "re-raises StandardError exceptions with logging" do
+        allow_any_instance_of(CurrencyConverter::APIClient)
+          .to receive(:get_rate)
+          .and_raise(StandardError, "Unexpected error")
+
+        logger = instance_double(Logger, error: nil, info: nil)
+        allow(CurrencyConverter.configuration).to receive(:logger).and_return(logger)
+
+        expect(logger).to receive(:error).with(/Conversion failed/)
+
+        expect { converter.convert(100, "USD", "EUR") }
+          .to raise_error(StandardError, "Unexpected error")
+      end
     end
 
     context "with invalid amount" do
       it "raises InvalidAmountError when amount is nil" do
         expect { converter.convert(nil, "USD", "EUR") }
           .to raise_error(CurrencyConverter::InvalidAmountError, "Amount cannot be nil")
+      end
+
+      it "does not log validation errors" do
+        logger = instance_double(Logger, error: nil, info: nil)
+        allow(CurrencyConverter.configuration).to receive(:logger).and_return(logger)
+
+        expect(logger).not_to receive(:error)
+
+        expect { converter.convert(nil, "USD", "EUR") }
+          .to raise_error(CurrencyConverter::InvalidAmountError)
       end
 
       it "raises InvalidAmountError when amount is not numeric" do
