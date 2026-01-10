@@ -9,3 +9,9 @@
 
 # rspec failure tracking
 .rspec_status
+
+# Claude Code documentation (local only)
+CLAUDE.md
+ACTION_PLAN.md
+TESTING_PLAN.md
+TESTING_SUMMARY.md
