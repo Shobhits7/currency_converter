@@ -10,12 +10,13 @@ module CurrencyConverter
   # - `cache_duration`: Duration for which the exchange rates should be cached.
   # - `logger`: Configurable logger for logging any errors or information.
   class Configuration
-    attr_accessor :api_key, :cache_duration, :logger
+    attr_accessor :api_key, :cache_duration, :logger, :timeout
 
     def initialize
-      @api_key = ENV["CURRENCY_CONVERTER_API_KEY"]
+      @api_key = ENV.fetch("CURRENCY_CONVERTER_API_KEY", nil)
       @cache_duration = 1.hour # Default cache duration is 1 hour
       @logger = Logger.new($stdout)
+      @timeout = 10 # Default timeout is 10 seconds
     end
   end
 

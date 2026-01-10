@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    currency-converter (1.1.0)
+    currency-converter (1.2.0)
 
 GEM
   remote: https://rubygems.org/
@@ -21,6 +21,7 @@ GEM
       bigdecimal
       rexml
     diff-lcs (1.5.1)
+    docile (1.4.1)
     hashdiff (1.1.2)
     i18n (1.14.6)
       concurrent-ruby (~> 1.0)
@@ -63,6 +64,12 @@ GEM
     rubocop-ast (1.35.0)
       parser (>= 3.3.1.0)
     ruby-progressbar (1.13.0)
+    simplecov (0.22.0)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.13.2)
+    simplecov_json_formatter (0.1.4)
     stringio (3.1.2)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
@@ -83,6 +90,7 @@ DEPENDENCIES
   rake (~> 13.0)
   rspec (~> 3.0)
   rubocop (~> 1.21)
+  simplecov
   stringio (~> 3.1.2)
   webmock
 
