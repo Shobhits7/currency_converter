@@ -1,5 +1,7 @@
 AllCops:
   TargetRubyVersion: 2.6
+  NewCops: enable
+  SuggestExtensions: false
 
 Style/StringLiterals:
   Enabled: true
@@ -11,3 +13,19 @@ Style/StringLiteralsInInterpolation:
 
 Layout/LineLength:
   Max: 120
+
+# Allow longer methods for complex logic
+Metrics/MethodLength:
+  Max: 15
+  Exclude:
+    - 'lib/currency_converter/api_client.rb'
+    - 'lib/currency_converter/converter.rb'
+
+# Allow longer blocks in tests
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*_spec.rb'
+
+# Disable for generated or gem metadata files
+Gemspec/RequireMFA:
+  Enabled: false

@@ -16,5 +16,6 @@ gem "stringio", "~> 3.1.2"
 gem "activesupport", "~> 6.1"
 
 group :test do
+  gem "simplecov", require: false
   gem "webmock"
 end
